@@ -5,6 +5,7 @@ public class User {
 	private String name;
 	private String password;
 	private String id;
+	private int no;
 
 	public void setEmail(String email) {
 		this.email = email;
@@ -62,6 +63,14 @@ public class User {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public int getNo() {
+		return no;
+	}
+
+	public void setNo(int no) {
+		this.no = no;
 	}
 
 }
