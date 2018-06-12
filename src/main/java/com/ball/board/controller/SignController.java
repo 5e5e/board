@@ -1,4 +1,4 @@
-package com.ball.board.controeller;
+package com.ball.board.controller;
 
 import javax.servlet.http.HttpSession;
 

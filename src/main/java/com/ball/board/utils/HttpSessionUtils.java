@@ -10,5 +10,4 @@ public class HttpSessionUtils {
 	public static User sessionedUser(HttpSession session) {
 		return (User) session.getAttribute(SIGNED_USER);
 	}
-
 }
