@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.ball.board.domain.User;
 import com.ball.board.domain.UserRepository;
+import com.ball.board.utils.HttpSessionUtils;
 
 @Controller
 public class SignController {
 	@Autowired
 	private UserRepository userRepository;
 
-	private final String SIGNED_USER = "signedUser";
 
 	@GetMapping("/sign-in")
 	public String form() {
@@ -31,13 +31,13 @@ public class SignController {
 		if (!user.isUser(userId, password)) {
 			return "/sign/signIn_failed";
 		}
-		session.setAttribute(SIGNED_USER, user);
+		session.setAttribute(HttpSessionUtils.SIGNED_USER, user);
 		return "redirect:/";
 	}
 
 	@GetMapping("/sign-out")
 	public String signOut(HttpSession session) {
-		session.removeAttribute(SIGNED_USER);
+		session.removeAttribute(HttpSessionUtils.SIGNED_USER);
 		return "redirect:/";
 	}
 }
