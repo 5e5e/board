@@ -8,6 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class User {
 	@Id
+	@Column(name = "id", updatable = false, nullable = false)
 	@GeneratedValue
 	private Long id;
 
@@ -55,6 +56,19 @@ public class User {
 		return email;
 	}
 
+	public boolean isUser(String userId, String password) {
+
+		return isUserId(userId) && isPassword(password);
+	}
+
+	private boolean isUserId(String userId) {
+		return this.userId.equals(userId);
+	}
+
+	private boolean isPassword(String password) {
+		return this.password.equals(password);
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -85,5 +99,6 @@ public class User {
 		return "User [id=" + id + ", userId=" + userId + ", password=" + password + ", name=" + name + ", email="
 				+ email + "]";
 	}
+
 
 }
