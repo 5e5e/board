@@ -8,20 +8,19 @@ import javax.persistence.Id;
 @Entity
 public class User {
 	@Id
-	@Column(name = "id", updatable = false, nullable = false)
 	@GeneratedValue
 	private Long id;
 
-	@Column(nullable = false, length = 20, updatable = false, unique = true)
+	@Column(nullable = false, length = 20)
 	private String userId;
 
 	@Column(nullable = false, length = 20)
 	private String password;
 
-	@Column(nullable = false, length = 20, unique = true)
+	@Column(nullable = false, length = 16)
 	private String name;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String email;
 
 	public void setUserId(String userId) {
@@ -56,6 +55,14 @@ public class User {
 		return email;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public boolean isNull() {
+		return this == null;
+	}
+
 	public boolean isUser(String userId, String password) {
 
 		return isUserId(userId) && isPassword(password);
@@ -67,6 +74,10 @@ public class User {
 
 	private boolean isPassword(String password) {
 		return this.password.equals(password);
+	}
+
+	public boolean isUser(User sessionedUser) {
+		return this.equals(sessionedUser);
 	}
 
 	@Override
@@ -100,5 +111,10 @@ public class User {
 				+ email + "]";
 	}
 
+	public void edit(String password, String name, String email) {
+		this.password = password;
+		this.name = name;
+		this.email = email;
+	}
 
 }
