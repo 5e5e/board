@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ball.board.domain.AnswerRepository;
 import com.ball.board.domain.Question;
 import com.ball.board.domain.QuestionRepository;
 import com.ball.board.domain.User;
@@ -21,6 +22,9 @@ public class QuestionController {
 
 	@Autowired
 	private QuestionRepository questionRepository;
+
+	@Autowired
+	private AnswerRepository answerRepository;
 
 	@GetMapping("")
 	public String form(HttpSession session, Model model) {
@@ -42,10 +46,11 @@ public class QuestionController {
 		questionRepository.save(question);
 		return "redirect:/";
 	}
-	
-	@GetMapping("/{id}/show")
-	public String show(@PathVariable Long id,Model model) {
-		model.addAttribute("question", questionRepository.findById(id).get());
+
+	@GetMapping("/{id}")
+	public String show(@PathVariable Long id, Model model_1, Model model_2) {
+		model_1.addAttribute("question", questionRepository.findById(id).get());
+		model_2.addAttribute("answers", answerRepository.findAll());
 		return "/question/show";
 	}
 
