@@ -1,9 +1,8 @@
+
 package com.example.demo.domain;
 
 import java.time.LocalDateTime;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,9 +14,10 @@ public class Question {
 	private String contents;
 	private String title;
 	private LocalDateTime time;
-
 	@DBRef
 	private User user;
+
+	private int countOfAnswer = 0;
 
 	public Question() {
 
@@ -39,8 +39,6 @@ public class Question {
 		this.time = LocalDateTime.now();
 	}
 
-	private static final Logger log = LoggerFactory.getLogger(Question.class);
-
 	public String getId() {
 		return id;
 	}
@@ -61,10 +59,22 @@ public class Question {
 		return user;
 	}
 
+	public int getCountOfAnswer() {
+		return countOfAnswer;
+	}
+
 	public void update(User writer, String title, String contents) {
 		this.user = writer;
 		this.title = title;
 		this.contents = contents;
+	}
+
+	public void addAnswer() {
+		this.countOfAnswer += 1;
+	}
+
+	public void deleteAnswer() {
+		--this.countOfAnswer;
 	}
 
 }

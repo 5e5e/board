@@ -6,8 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 @Document
 public class Answer {
 
@@ -56,6 +54,10 @@ public class Answer {
 
 	public User getWriter() {
 		return writer;
+	}
+
+	public boolean isWriter(User user) {
+		return user.equals(this.writer);
 	}
 
 }

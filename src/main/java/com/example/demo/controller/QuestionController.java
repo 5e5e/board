@@ -54,7 +54,7 @@ public class QuestionController {
 	public String form(@PathVariable String id, Model model) {
 		Question question = questionRepository.findById(id).get();
 		model.addAttribute("question", question);
-		model.addAttribute("answers", answerRepository.findAll());
+		model.addAttribute("answers", answerRepository.findByQuestionId(id));
 		return "question/show";
 	}
 
