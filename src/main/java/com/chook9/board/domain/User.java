@@ -52,4 +52,11 @@ public class User {
 		return password.equals(hashedPassword);
 	}
 
+	public User update(String hashPassword, String name, String email) {
+		this.password = hashPassword;
+		this.name = name;
+		this.email = email;
+		return this;
+	}
+
 }

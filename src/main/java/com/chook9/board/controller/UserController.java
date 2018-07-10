@@ -2,12 +2,12 @@ package com.chook9.board.controller;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.chook9.board.domain.User;
@@ -28,7 +28,7 @@ public class UserController {
 
 	@PostMapping("/create")
 	public String userCreate(String userId, String password, String name, String email) {
-		userRepository.save(new User(userId, DigestUtils.sha256Hex(password), name, email));
+		userRepository.save(new User(userId, UserUtils.hashPassword(password), name, email));
 		return String.format("redirect:/users/list");
 	}
 
@@ -48,8 +48,8 @@ public class UserController {
 		User dbUser = null;
 		try {
 			dbUser = varifyUser(userId);
-			UserUtils.varifyUser(dbUser, DigestUtils.sha256Hex(password));
-		} catch (IllegalArgumentException | NullPointerException e) {
+			UserUtils.varifyUser(dbUser, UserUtils.hashPassword(password));
+		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			return String.format("redirect:/loginFailed");
 		}
@@ -63,6 +63,27 @@ public class UserController {
 			return user;
 		}
 		throw new IllegalArgumentException("존재하지 않는 아이디 입니다.");
+	}
+
+	@GetMapping("/edit")
+	public String editForm(HttpSession httpSession, Model model) {
+		Object tempUser = httpSession.getAttribute("loginedUser");
+		try {
+			if (tempUser == null) {
+				throw new IllegalArgumentException();
+			}
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		model.addAttribute("dbUser", (User) tempUser);
+		return "/user/user-info-form";
+	}
+
+	@PutMapping("/editSubmit")
+	public String edit(String userId, String password, String name, String email) {
+		User user = userRepository.findByUserId(userId);
+		userRepository.save(user.update(UserUtils.hashPassword(password), name, email));
+		return String.format("redirect:/users/list");
 	}
 
 }
