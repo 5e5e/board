@@ -19,7 +19,7 @@ public class RsaTest {
 	public void generateKeyPair() throws NoSuchAlgorithmException {
 		KeyPair keyPair = Security.generateKeyPair();
 		assertThat(keyPair.getPrivate());
-		assertThat(keyPair.getPrivate());
+		assertThat(keyPair.getPublic());
 	}
 
 	@Test
