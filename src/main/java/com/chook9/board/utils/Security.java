@@ -63,6 +63,7 @@ public class Security {
 	public static String decrypt(String cipherText, byte[] encodedPrivateKey) throws NoSuchAlgorithmException {
 		PrivateKey privateKey = Security.generatePrivateKey(encodedPrivateKey);
 		try {
+			
 			byte[] bytes = Base64.getDecoder().decode(cipherText);
 			Cipher cipher = Cipher.getInstance(KEY_FACTORY_ALGORITHM);
 			cipher.init(Cipher.DECRYPT_MODE, privateKey);
