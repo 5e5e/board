@@ -1,15 +1,9 @@
 package com.chook9.board.domain;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
-
-import com.chook9.board.utils.Security;
 
 @Entity
 public class User {
