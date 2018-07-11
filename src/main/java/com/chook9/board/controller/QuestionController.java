@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,7 +69,7 @@ public class QuestionController {
 		try {
 			User sessionUser = UserUtils.getSessionUser(httpSession);
 			question = findQuestion(id);
-			System.out.println("작성자 : " + question.isWriter(sessionUser));
+			question.isWriter(sessionUser);
 			questionRepository.save(question.update(title, contents));
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -77,7 +78,25 @@ public class QuestionController {
 		return String.format("redirect:/questions/%s", question.getId());
 	}
 
+	@DeleteMapping("/{id}")
+	public String delete(@PathVariable Long id, HttpSession httpSession) {
+		Question question = null;
+		try {
+			User sessionUser = UserUtils.getSessionUser(httpSession);
+			question = findQuestion(id);
+			question.isWriter(sessionUser);
+			questionRepository.delete(question);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		return "redirect:/";
+	}
+
 	private Question findQuestion(Long id) {
-		return questionRepository.findById(id).get();
+		Question quesion = questionRepository.findById(id).get();
+		if (questionRepository.findById(id).get() != null) {
+			return quesion;
+		}
+		throw new IllegalArgumentException("존재하지 않는 글 입니다.");
 	}
 }
