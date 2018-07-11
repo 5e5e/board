@@ -50,4 +50,17 @@ public class Question {
 		return "Question [id=" + id + ", writer=" + writer + ", title=" + title + ", contents=" + contents + "]";
 	}
 
+	public boolean isWriter(User sessionUser) {
+		if (!sessionUser.equals(this.writer)) {
+			throw new IllegalArgumentException("글 작성자만 수정을 할 수 있습니다.");
+		}
+		return true;
+	}
+
+	public Question update(String title, String contents) {
+		this.title = title;
+		this.contents = contents;
+		return this;
+	}
+
 }
