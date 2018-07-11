@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +51,7 @@ public class UserController {
 		try {
 			dbUser = varifyUser(userId);
 			UserUtils.varifyUser(dbUser, UserUtils.hashPassword(password));
+			dbUser.isVaild();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			return String.format("redirect:/loginFailed");
@@ -91,6 +93,21 @@ public class UserController {
 	public String profile(@PathVariable Long id, Model model) {
 		model.addAttribute("user", userRepository.findById(id).get());
 		return "/user/profile";
+	}
+
+	@DeleteMapping("/{id}/delete")
+	public String delete(@PathVariable Long id, HttpSession httpSession) {
+		try {
+			User dbUser = userRepository.findById(id).get();
+			User loginedUser = UserUtils.getSessionUser(httpSession);
+			dbUser.isUser(loginedUser);
+			httpSession.removeAttribute(UserUtils.LOGIN_USER);
+			dbUser.deletedUser("", UserUtils.hashPassword(""), "탈퇴한 유저", "");
+			userRepository.save(dbUser);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		return String.format("redirect:/");
 	}
 
 }

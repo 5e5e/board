@@ -15,6 +15,8 @@ public class User {
 	private String email;
 	private String password;
 
+	private boolean valid;
+
 	public User() {
 
 	}
@@ -24,6 +26,7 @@ public class User {
 		this.password = password;
 		this.name = name;
 		this.email = email;
+		this.valid = true;
 	}
 
 	public String getUserId() {
@@ -62,6 +65,7 @@ public class User {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+		result = prime * result + (valid ? 1231 : 1237);
 		return result;
 	}
 
@@ -99,7 +103,34 @@ public class User {
 				return false;
 		} else if (!userId.equals(other.userId))
 			return false;
+		if (valid != other.valid)
+			return false;
 		return true;
 	}
 
+	public boolean isUser(User loginedUser) {
+		if (!this.equals(loginedUser)) {
+			throw new IllegalArgumentException("일치하지 않는 사용자입니다.");
+		}
+		return true;
+	}
+
+	public boolean isVaild() {
+		if (!this.valid) {
+			throw new IllegalArgumentException("탈퇴한 계정입니다.");
+		}
+		return true;
+	}
+
+	public void nonValid() {
+		this.valid = false;
+	}
+
+	public void deletedUser(String userId, String hashPassword, String name, String email) {
+		this.userId = userId;
+		this.password = hashPassword;
+		this.name = name;
+		this.email = email;
+		this.valid = false;
+	}
 }

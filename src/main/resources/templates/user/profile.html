@@ -20,6 +20,10 @@
 							</p>
 						</div>
 					</div>
+					<form name="userDelete" method="post" action="/users/{{id}}/delete">
+				<input type="hidden" name="_method" value="delete">
+						<button type="submit" class="btn btn-success clearfix pull-right">탈퇴하기</button>
+					</form>
 				</div>
 				{{/user}}
 			</div>
