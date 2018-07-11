@@ -94,7 +94,7 @@ public class QuestionController {
 
 	private Question findQuestion(Long id) {
 		Question quesion = questionRepository.findById(id).get();
-		if (questionRepository.findById(id).get() != null) {
+		if (quesion != null) {
 			return quesion;
 		}
 		throw new IllegalArgumentException("존재하지 않는 글 입니다.");

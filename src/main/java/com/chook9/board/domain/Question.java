@@ -1,5 +1,7 @@
 package com.chook9.board.domain;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 @Entity
 public class Question {
@@ -19,11 +23,16 @@ public class Question {
 	private String title;
 	private String contents;
 
+	@OneToMany(mappedBy = "question")
+	@OrderBy("id DESC")
+	private List<Answer> answers;
+
 	public Question() {
 
 	}
 
 	public Question(User writer, String title, String contents) {
+		super();
 		this.writer = writer;
 		this.title = title;
 		this.contents = contents;
@@ -43,6 +52,10 @@ public class Question {
 
 	public String getContents() {
 		return contents;
+	}
+
+	public List<Answer> getAnswers() {
+		return answers;
 	}
 
 	@Override
