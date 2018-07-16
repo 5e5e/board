@@ -56,7 +56,7 @@ public class UserController {
 			e.printStackTrace();
 			return String.format("redirect:/loginFailed");
 		}
-		httpSession.setAttribute("loginedUser", dbUser);
+		httpSession.setAttribute(UserUtils.LOGIN_USER, dbUser);
 		return String.format("redirect:/");
 	}
 
@@ -103,7 +103,7 @@ public class UserController {
 			dbUser.isUser(loginedUser);
 			httpSession.removeAttribute(UserUtils.LOGIN_USER);
 			dbUser.deletedUser("", UserUtils.hashPassword(""), "탈퇴한 유저", "");
-			userRepository.save(dbUser);
+			userRepository.deleteById(id);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}

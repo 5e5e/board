@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.chook9.board.domain.Answer;
 import com.chook9.board.domain.AnswerRepository;
 import com.chook9.board.domain.QuestionRepository;
-import com.chook9.board.domain.User;
 import com.chook9.board.utils.UserUtils;
 
 @RestController
@@ -31,8 +30,8 @@ public class ApiAnswerController {
 	@PostMapping("")
 	public Answer answer(@PathVariable Long questionId, HttpSession httpSession, String contents) {
 		try {
-			User writer = UserUtils.getSessionUser(httpSession);
-			return answerRepository.save(new Answer(writer, questionRepository.findById(questionId).get(), contents));
+			return answerRepository.save(new Answer(UserUtils.getSessionUser(httpSession),
+					questionRepository.findById(questionId).get(), contents));
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}

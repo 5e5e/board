@@ -5,6 +5,7 @@ import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -12,12 +13,16 @@ public class Answer {
 	@Id
 	@GeneratedValue
 	private Long id;
+
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
 	private User writer;
+
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
 	private Question question;
+
+	@Lob
 	private String contents;
 
 	public Answer() {
@@ -25,26 +30,25 @@ public class Answer {
 	}
 
 	public Answer(User writer, Question question, String contents) {
-		super();
 		this.writer = writer;
 		this.contents = contents;
 		this.question = question;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public User getWriter() {
 		return writer;
 	}
 
-	public void setWriter(User writer) {
-		this.writer = writer;
+	public Question getQuestion() {
+		return question;
 	}
 
 	public String getContents() {
 		return contents;
-	}
-
-	public void setContents(String contents) {
-		this.contents = contents;
 	}
 
 	@Override

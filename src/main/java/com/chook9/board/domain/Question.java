@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -21,10 +22,11 @@ public class Question {
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
 	private User writer;
 	private String title;
+	@Lob
 	private String contents;
 
 	@OneToMany(mappedBy = "question")
-	@OrderBy("id DESC")
+	@OrderBy("id ASC")
 	private List<Answer> answers;
 
 	public Question() {
@@ -32,7 +34,6 @@ public class Question {
 	}
 
 	public Question(User writer, String title, String contents) {
-		super();
 		this.writer = writer;
 		this.title = title;
 		this.contents = contents;
@@ -52,10 +53,6 @@ public class Question {
 
 	public String getContents() {
 		return contents;
-	}
-
-	public List<Answer> getAnswers() {
-		return answers;
 	}
 
 	@Override

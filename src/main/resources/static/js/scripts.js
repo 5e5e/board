@@ -16,20 +16,20 @@ function addAnswer(e) {
 
 	xhr.onload = function() {
 		if (xhr.status === 200) {
-			var answerTemplate = document.querySelector('#answerTemplate');
-			console.log(answerTemplate);
-			var jObjcet = JSON.parse(xhr.responseText);
-			console.log(jObjcet);
-			// console.log(jObject.writer);
-			alert('Something went wrong.  Name is now ' + xhr.responseText);
-			console.log(xhr.response);
+			var answerTemplate = document.querySelector('#answerTemplate').innerHTML;
+			jObjcet = JSON.parse(xhr.responseText);
+			var template = answerTemplate.format(jObjcet.writer.name, 0,
+					jObjcet.contents, jObjcet.question.id, jObjcet.id);
+			$(".qna-comment-slipp-articles").prepend(template);
+			document.querySelector('.answer-write textarea[name=contents]').value = '';
+			alert('Something went wrong. Name is now ' + xhr.responseText);
 		} else if (xhr.status !== 200) {
 			alert('Request failed.  Returned status of ' + xhr.status);
 		}
 	};
 	xhr.open('POST', url);
-	xhr.setRequestHeader('Content-Type', 'application/json');
-	xhr.send(JSON.stringify(query));
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xhr.send(query);
 }
 var button = document.querySelector('.answer-write input[type=submit]');
 button.addEventListener('click', addAnswer);

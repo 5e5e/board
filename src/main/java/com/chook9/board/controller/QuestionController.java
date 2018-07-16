@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.chook9.board.domain.AnswerRepository;
 import com.chook9.board.domain.Question;
 import com.chook9.board.domain.QuestionRepository;
 import com.chook9.board.domain.User;
@@ -22,6 +23,8 @@ import com.chook9.board.utils.UserUtils;
 public class QuestionController {
 	@Autowired
 	private QuestionRepository questionRepository;
+	@Autowired
+	private AnswerRepository answerRepository;
 
 	@GetMapping("/create")
 	public String questionForm() {
@@ -46,6 +49,7 @@ public class QuestionController {
 	@GetMapping("/{id}")
 	public String show(@PathVariable Long id, Model model) {
 		model.addAttribute("question", findQuestion(id));
+		model.addAttribute("answers", answerRepository.findByQuestionId(id));
 		return "/question/show";
 	}
 
@@ -85,7 +89,7 @@ public class QuestionController {
 			User sessionUser = UserUtils.getSessionUser(httpSession);
 			question = findQuestion(id);
 			question.isWriter(sessionUser);
-			questionRepository.delete(question);
+			questionRepository.deleteById(id	);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
