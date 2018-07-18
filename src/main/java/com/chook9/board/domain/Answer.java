@@ -81,4 +81,15 @@ public class Answer {
 		return "Answer [id=" + id + ", writer=" + writer + ", contents=" + contents + "]";
 	}
 
+	public boolean isWriter(User loginedUser) {
+		if (this.writer.equals(loginedUser)) {
+			return true;
+		}
+		throw new IllegalArgumentException("답변 글쓴이가 아닙니다.");
+	}
+
+	public void edit(String contents) {
+		this.contents = contents;
+	}
+
 }

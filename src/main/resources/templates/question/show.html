@@ -1,5 +1,9 @@
 {{#partial "base"}}
 <div class="container" id="main">
+	<div>
+		<p>hello : <%= Session("loginedUser").ToString%></p>
+	</div>
+
 	<div class="col-md-12 col-sm-12 col-lg-12">
 		<div class="panel panel-default">
 			{{#question}}
@@ -55,8 +59,9 @@
 									<div class="article-header-text">
 										<a href="/users/{{writer.id}}/profile"
 											class="article-author-name">{{writer.name}}</a><a
-											href="/questions/" class="article-header-time" title="퍼머링크">
-											2016-01-12 14:06 </a>
+											href="/api/questions/{{question.id}}/answers/{{id}}"
+											class="article-header-time" title="퍼머링크"> 2016-01-12
+											14:06 </a>
 									</div>
 								</div>
 								<div class="article-doc comment-doc">
@@ -64,11 +69,16 @@
 								</div>
 								<div class="article-util">
 									<ul class="article-util-list">
-										<li><a class="link-modify-article"
-											href="/api/questions/413/answers/1405/form">수정</a></li>
+										<li>
+											<form class="update-answer-form"
+												action="/api/questions/{{question.id}}/answers/{{id}}"
+												method="GET">
+												<button type="submit" class="update-answer-button">수정</button>
+											</form>
 										<li>
 											<form class="delete-answer-form"
-												action="/questions/413/answers/1405" method="POST">
+												action="/api/questions/{{question.id}}/answers/{{id}}"
+												method="POST">
 												<input type="hidden" name="_method" value="DELETE">
 												<button type="submit" class="delete-answer-button">삭제</button>
 											</form>
@@ -103,7 +113,7 @@
 				<img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
 			</div>
 			<div class="article-header-text">
-				<a href="/users/{{jObjcet.writer.id}}/profile" class="article-author-name">{0}</a>
+				<a href="/users/{4}/profile" class="article-author-name">{0}</a>
 				<div class="article-header-time">{1}</div>
 			</div>
 		</div>
@@ -113,10 +123,12 @@
 		<div class="article-util">
 		<ul class="article-util-list">
 			<li>
-				<a class="link-modify-article" href="/api/qna/updateAnswer/{3}">수정</a>
+				<form class="update-answer-form" action="/api/questions/{3}/answers/{5}" method="GET">
+                     <button type="submit" class="update-answer-button">수정</button>
+				</form>
 			</li>
 			<li>
-				<form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">
+				<form class="delete-answer-form" action="/api/questions/{3}/answers/{5}" method="POST">
 					<input type="hidden" name="_method" value="DELETE">
                      <button type="submit" class="delete-answer-button">삭제</button>
 				</form>

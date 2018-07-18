@@ -1,38 +1,81 @@
-function addAnswer(e) {
-	answerTemplate
-	e.preventDefault();
-	var html = document.querySelector('.answer-write .form-control');
-	var key = html.getAttribute("name");
-	var value = html.value;
-	var query = key + "=" + value;
-	console.log("message : " + html);
-	console.log("key : " + key);
-	console.log("value : " + value);
-	console.log(typeof query, "query : " + query);
-	var url = document.querySelector('.answer-write').getAttribute('action');
-	console.log("url : " + url);
-	// post 통신
-	var xhr = new XMLHttpRequest();
+$(".answer-write input[type=submit]").click(addAnswer);
 
-	xhr.onload = function() {
-		if (xhr.status === 200) {
-			var answerTemplate = document.querySelector('#answerTemplate').innerHTML;
-			jObjcet = JSON.parse(xhr.responseText);
-			var template = answerTemplate.format(jObjcet.writer.name, 0,
-					jObjcet.contents, jObjcet.question.id, jObjcet.id);
-			$(".qna-comment-slipp-articles").prepend(template);
-			document.querySelector('.answer-write textarea[name=contents]').value = '';
-			alert('Something went wrong. Name is now ' + xhr.responseText);
-		} else if (xhr.status !== 200) {
-			alert('Request failed.  Returned status of ' + xhr.status);
-		}
-	};
-	xhr.open('POST', url);
-	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	xhr.send(query);
+function addAnswer(e) {
+	e.preventDefault();
+	console.log("click!!");
+
+	var queryString = $(".answer-write").serialize();
+	console.log("query : " + queryString);
+
+	var url = $(".answer-write").attr("action");
+	console.log("url : " + url);
+
+	$.ajax({
+		type : 'post',
+		url : url,
+		data : queryString,
+		dataType : 'json',
+		error : onError,
+		success : onSuccess
+	});
 }
-var button = document.querySelector('.answer-write input[type=submit]');
-button.addEventListener('click', addAnswer);
+
+function onError() {
+
+}
+
+function onSuccess(data, status) {
+	console.log(data);
+	var answerId = data.id;
+	var answerWriter = data.writer.name;
+	var answerCreateTime = "0000-00-00 00:00:00";
+	var contents = data.contents;
+	var questionId = data.question.id;
+	var answerWriterId = data.writer.id;
+	console.log(answerId);
+	var answerTemplate = $("#answerTemplate").html();
+	var template = answerTemplate.format(answerWriter, answerCreateTime,
+			contents, questionId, answerWriterId, answerId);
+	$(".qna-comment-slipp-articles").prepend(template);
+
+	$("textarea[name=contents]").val("");
+}
+
+$(".delete-answer-form button[type=submit]").click(deleteAnswer);
+
+function deleteAnswer(e) {
+	e.preventDefault();
+
+	var deleteBtn = $(this);
+	console.log(deleteBtn);
+	var url = $(".delete-answer-form").attr("action");
+	console.log("url : " + url);
+
+	$.ajax({
+		type : 'delete',
+		url : url,
+		dataType : 'json',
+		error : function(xhr, status) {
+			console.log("error");
+		},
+		success : function(data, status) {
+			if (status) {
+				deleteBtn.closest("article").remove();
+			} else {
+				alert(data.errorMessage);
+			}
+		}
+	});
+}
+$(".update-answer-form button[type=submit]").click(updateAnswer);
+
+function updateAnswer(e) {
+	e.preventDefault();
+	var template = document.querySelector(".answer-write").innerHTML;
+	console.log(template);
+	$(this).closest("article").append(template);
+
+}
 
 String.prototype.format = function() {
 	var args = arguments;
